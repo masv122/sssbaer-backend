@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 class CreateSolicitudesTable extends Migration
 {
     /**
@@ -16,7 +17,7 @@ class CreateSolicitudesTable extends Migration
         Schema::create('solicitudes', function (Blueprint $table) {
             $table->id();
             $table->string('idAdministrador', 255)->nullable();
-            $table->string('idUsuario', 255);
+            $table->foreignId('idUsuario', 255)->references('id')->on('users');
             $table->string('comentarioAdicional', 500)->nullable();
             $table->string('coordinacion', 255);
             $table->string('problema', 255);

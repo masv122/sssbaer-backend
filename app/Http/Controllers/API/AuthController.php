@@ -17,20 +17,20 @@ class AuthController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'email|required|string|unique:users',
-            'password' => 'required|string|min:8'
+            'password' => 'required|string|min:8',
+            'admi' => 'required|boolean'
         ]);
-
-        /* $validatedData['password'] = Hash::make($request->password); */
 
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
+            'admi' => $validatedData['admi'],
         ]);
 
         $accessToken = $user->createToken('authToken')->plainTextToken;
 
-        return response()->json(['access_token' => $accessToken, 'token_type' => 'Bearer']);
+        return response(['message' => 'Created successfully'], 422)->json();
     }
 
     public function login(Request $request)

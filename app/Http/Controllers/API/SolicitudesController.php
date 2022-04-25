@@ -18,7 +18,7 @@ class SolicitudesController extends Controller
     public function index()
     {
         $solicitudes = Solicitudes::all();
-        return response([ 'solicitudes' => SolicitudesResource::collection($solicitudes), 'message' => 'Retrieved successfully'], 200);
+        return response(['solicitudes' => SolicitudesResource::collection($solicitudes), 'message' => 'Retrieved successfully'], 200);
     }
 
     /**
@@ -45,7 +45,7 @@ class SolicitudesController extends Controller
 
         $Solicitudes = Solicitudes::create($data);
 
-        return response(['Solicitudes' => new SolicitudesResource($Solicitudes), 'message' => 'Created successfully'], 201);
+        return response(['Solicitudes' => new SolicitudesResource($Solicitudes), 'message' => 'Created successfully']);
     }
 
     /**

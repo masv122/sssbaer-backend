@@ -30,7 +30,7 @@ class AuthController extends Controller
 
         $accessToken = $user->createToken('authToken')->plainTextToken;
 
-        return response(['message' => 'Created successfully'], 422)->json();
+        return response()->json(['message' => 'Created successfully']);
     }
 
     public function login(Request $request)

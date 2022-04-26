@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\SolicitudesAuxController;
 use App\Http\Controllers\API\SolicitudesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,5 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/info-user', [AuthController::class, 'infoUsuario'])->middleware('auth:sanctum');
-
+Route::post('/solicitudes-usuario', [SolicitudesAuxController::class, 'solicitudesUsuario']);
 Route::apiResource('/solicitudes', SolicitudesController::class)->middleware('auth:sanctum');

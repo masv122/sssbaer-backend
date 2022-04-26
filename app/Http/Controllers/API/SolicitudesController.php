@@ -40,12 +40,12 @@ class SolicitudesController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['error' => $validator->errors(), 'Validation Error']);
+            return response(['error' => $validator->errors(), 'Validation Error'], 400);
         }
 
         $Solicitudes = Solicitudes::create($data);
 
-        return response(['Solicitudes' => new SolicitudesResource($Solicitudes), 'message' => 'Created successfully']);
+        return response()->json(['Solicitudes' => new SolicitudesResource($Solicitudes), 'message' => 'ok']);
     }
 
     /**

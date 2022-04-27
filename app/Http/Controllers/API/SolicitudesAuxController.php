@@ -17,4 +17,5 @@ class SolicitudesAuxController extends Controller
         $solicitudes = DB::select('select * from solicitudes where idUsuario = :id', ['id' => $id]);
         return response()->json(['solicitudes' => $solicitudes]);
     }
+
 }

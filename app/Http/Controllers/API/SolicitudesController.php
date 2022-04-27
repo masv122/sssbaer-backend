@@ -32,7 +32,6 @@ class SolicitudesController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'idAdministrador' => 'max:255',
             'idUsuario' => 'required|max:255',
             'comentarioAdicional' => 'max:255',
             'coordinacion' => 'required',
@@ -54,9 +53,13 @@ class SolicitudesController extends Controller
      * @param  \App\Models\Solicitudes  $solicitudes
      * @return \Illuminate\Http\Response
      */
-    public function show(Solicitudes $id)
+    public function show($id)
     {
-        return response(['Solicitudes' => new SolicitudesResource($id), 'message' => 'Retrieved successfully'], 200);
+        $solicitudes = Solicitudes::find($id);
+        if (is_null($solicitudes)) {
+            return response()->json('Data not found', 404);
+        }
+        return response()->json([new SolicitudesResource($solicitudes)]);
     }
 
     /**
@@ -68,9 +71,30 @@ class SolicitudesController extends Controller
      */
     public function update(Request $request, Solicitudes $solicitudes)
     {
-        $solicitudes->update($request->all());
+/*         $validator = Validator::make($request->all(), [
+            'enProceso' => 'boolean',
+            'terminado' => 'boolean'
+        ]);
 
-        return response(['solicitudes' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200);
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+                $solicitudes->enProceso = $request->enProceso;
+        $solicitudes->terminado = $request->terminado;
+        $solicitudes->comentarioAdicional = $request->comentarioAdicional;
+        $data = [
+            'enProceso' => $request->enProceso,
+            'terminado' => $request->terminado,
+            ''
+        ]; */
+        $id = $request->id;
+        $solicitud = Solicitudes::find($id);
+        $solicitud->update($$request->all());
+        return response(['project' => new SolicitudesResource($solicitud), 'message' => 'Update successfully'], 200);
+        /*        $solicitudes->update($request->all());
+
+        return response(['solicitudes' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200); */
     }
 
     /**

@@ -18,4 +18,12 @@ class SolicitudesAuxController extends Controller
         return response()->json(['solicitudes' => $solicitudes]);
     }
 
+
+    public function solicitudesAdmi(Request $request)
+    {
+        $id = $request['id'];
+        $solicitudes = DB::select('select * from solicitudes where idAdministrador = :id', ['id' => $id]);
+        return response()->json(['solicitudes' => $solicitudes]);
+    }
+
 }

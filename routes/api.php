@@ -17,12 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/user/{id}', [AuthController::class, 'show']);
+    Route::post('/solicitudes-usuario', [SolicitudesAuxController::class, 'solicitudesUsuario']);
+    Route::post('/solicitudes-admi', [SolicitudesAuxController::class, 'solicitudesAdmi']);
+    Route::apiResource('/solicitudes', SolicitudesController::class);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/info-user', [AuthController::class, 'infoUsuario'])->middleware('auth:sanctum');
-Route::post('/solicitudes-usuario', [SolicitudesAuxController::class, 'solicitudesUsuario'])->middleware('auth:sanctum');
-Route::apiResource('/solicitudes', SolicitudesController::class)->middleware('auth:sanctum');

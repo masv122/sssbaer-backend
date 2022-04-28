@@ -16,7 +16,7 @@ class CreateSolicitudesTable extends Migration
     {
         Schema::create('solicitudes', function (Blueprint $table) {
             $table->id();
-            $table->string('idAdministrador', 255)->default("");
+            $table->string('idAdministrador', 255)->nullable();
             $table->integer('idUsuario');
             $table->string('comentarioAdicional', 500)->nullable();
             $table->string('coordinacion', 255);

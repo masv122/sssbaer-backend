@@ -89,9 +89,9 @@ class SolicitudesController extends Controller
             ''
         ]; */
         $id = $request->id;
-        $solicitud = Solicitudes::find($id);
-        $solicitud->update($$request->all());
-        return response(['project' => new SolicitudesResource($solicitud), 'message' => 'Update successfully'], 200);
+        $solicitudes = Solicitudes::find($id);
+        $solicitudes->update($request->all());
+        return response(['project' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200);
         /*        $solicitudes->update($request->all());
 
         return response(['solicitudes' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200); */

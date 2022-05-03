@@ -71,30 +71,10 @@ class SolicitudesController extends Controller
      */
     public function update(Request $request, Solicitudes $solicitudes)
     {
-/*         $validator = Validator::make($request->all(), [
-            'enProceso' => 'boolean',
-            'terminado' => 'boolean'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
-
-                $solicitudes->enProceso = $request->enProceso;
-        $solicitudes->terminado = $request->terminado;
-        $solicitudes->comentarioAdicional = $request->comentarioAdicional;
-        $data = [
-            'enProceso' => $request->enProceso,
-            'terminado' => $request->terminado,
-            ''
-        ]; */
         $id = $request->id;
         $solicitudes = Solicitudes::find($id);
         $solicitudes->update($request->all());
-        return response(['project' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200);
-        /*        $solicitudes->update($request->all());
-
-        return response(['solicitudes' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200); */
+        return response(['solicitud' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200);
     }
 
     /**

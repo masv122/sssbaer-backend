@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Resources\UserResource;
 
 
 
@@ -48,17 +47,32 @@ class AuthController extends Controller
         return response()->json(['access_token' => $accessToken, 'token_type' => 'Bearer']);
     }
 
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'res' => true,
+        ]);
+    }
+
     public function user(Request $request)
     {
         return $request->user();
     }
 
-    public function show($id)
+/*     public function show($id)
     {
         $usuario = User::find($id);
         if (is_null($usuario)) {
             return response()->json(['message' => 'No se encuentra usuario', 'id' => $id], 404);
         }
         return response()->json([new UserResource($usuario)]);
-    }
+    } */
+
+
+ /*    public function index()
+    {
+        $usuarios = User::all();
+        return response(['users' => UserResource::collection($usuarios), 'message' => 'Retrieved successfully'], 200);
+    } */
 }

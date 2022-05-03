@@ -3,7 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\SolicitudesAuxController;
 use App\Http\Controllers\API\SolicitudesController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,11 +19,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
-    Route::get('/user/{id}', [AuthController::class, 'show']);
+    Route::get('/logout', [AuthController::class, 'logout']);
     Route::post('/solicitudes-usuario', [SolicitudesAuxController::class, 'solicitudesUsuario']);
     Route::post('/solicitudes-admi', [SolicitudesAuxController::class, 'solicitudesAdmi']);
     Route::apiResource('/solicitudes', SolicitudesController::class);
 });
 
+Route::apiResource('/users', UserController::class);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

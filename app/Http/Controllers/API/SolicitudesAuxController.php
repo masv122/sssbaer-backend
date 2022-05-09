@@ -25,4 +25,6 @@ class SolicitudesAuxController extends Controller
         return response()->json(['solicitudes' => $solicitudes]);
     }
 
+
+
 }

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\EstadoActualizado;
+use App\Events\SolicitudEnviada;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SolicitudesResource;
 use App\Models\Solicitudes;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SolicitudesController extends Controller
 {
@@ -17,8 +20,11 @@ class SolicitudesController extends Controller
      */
     public function index()
     {
-        $solicitudes = Solicitudes::all();
-        return response(['solicitudes' => SolicitudesResource::collection($solicitudes), 'message' => 'Retrieved successfully'], 200);
+        $solicitudes = DB::table('solicitudes')
+            ->leftJoin('users', 'solicitudes.idUsuario', '=', 'users.id')
+            ->select('solicitudes.*', 'users.name')
+            ->get();
+        return response(['solicitudes' => $solicitudes, 'message' => 'Retrieved successfully'], 200);
     }
 
     /**
@@ -42,9 +48,14 @@ class SolicitudesController extends Controller
             return response(['error' => $validator->errors(), 'Validation Error'], 400);
         }
 
-        $Solicitudes = Solicitudes::create($data);
-
-        return response()->json(['Solicitudes' => new SolicitudesResource($Solicitudes), 'message' => 'ok']);
+        $solicitudes = Solicitudes::create($data);
+        $solicitud = DB::table('solicitudes')
+            ->leftJoin('users', 'solicitudes.idUsuario', '=', 'users.id')
+            ->select('solicitudes.*', 'users.name')
+            ->where('solicitudes.id', '=', $solicitudes->id)
+            ->get();
+        event(new SolicitudEnviada($solicitud[0]));
+        return response()->json(['Solicitudes' => new SolicitudesResource($solicitudes), 'message' => 'ok']);
     }
 
     /**
@@ -74,6 +85,12 @@ class SolicitudesController extends Controller
         $id = $request->id;
         $solicitudes = Solicitudes::find($id);
         $solicitudes->update($request->all());
+        $solicitud = DB::table('solicitudes')
+            ->leftJoin('users', 'solicitudes.idUsuario', '=', 'users.id')
+            ->select('solicitudes.*', 'users.name')
+            ->where('solicitudes.id', '=', $solicitudes->id)
+            ->get();
+        event(new EstadoActualizado($solicitud[0]));
         return response(['solicitud' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200);
     }
 

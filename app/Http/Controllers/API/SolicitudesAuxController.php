@@ -25,6 +25,13 @@ class SolicitudesAuxController extends Controller
         return response()->json(['solicitudes' => $solicitudes]);
     }
 
-
+    public function solicitudesEnProcesoOCompletadas()
+    {
+        $solicitudes = DB::table('solicitudes')
+        ->join('users', 'solicitudes.idAdministrador', '=', 'users.id')
+        ->select('solicitudes.*', 'users.name as admiName', 'users.id as admiID')
+        ->get();
+        return response()->json(['solicitudes' => $solicitudes]);
+    }
 
 }

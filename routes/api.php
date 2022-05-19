@@ -24,11 +24,12 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::get('/logout', [AuthController::class, 'logout']);
-    Route::post('/solicitudes-usuario', [SolicitudesAuxController::class, 'solicitudesUsuario']);
-    Route::post('/solicitudes-admi', [SolicitudesAuxController::class, 'solicitudesAdmi']);
-    Route::apiResource('/users', UserController::class);
-    Route::apiResource('/solicitudes', SolicitudesController::class);
 });
+Route::post('/solicitudes-admi', [SolicitudesAuxController::class, 'solicitudesAdmi']);
+Route::post('/solicitudes-usuario', [SolicitudesAuxController::class, 'solicitudesUsuario']);
+Route::get('/solicitudes-supervisor', [SolicitudesAuxController::class, 'solicitudesEnProcesoOCompletadas']);
+Route::apiResource('/users', UserController::class);
+Route::apiResource('/solicitudes', SolicitudesController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

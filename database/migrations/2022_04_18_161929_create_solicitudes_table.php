@@ -19,10 +19,13 @@ class CreateSolicitudesTable extends Migration
             $table->string('idAdministrador', 255)->nullable();
             $table->integer('idUsuario');
             $table->string('comentarioAdicional', 500)->nullable();
+            $table->string('razonCancelado', 500)->nullable();
+            $table->string('observacionesAlCompletar', 500)->nullable();
             $table->string('coordinacion', 255);
             $table->string('problema', 255);
             $table->boolean('enProceso')->default(false);
             $table->boolean('terminado')->default(false);
+            $table->boolean('confirmada')->default(false);
             $table->timestamps();
         });
     }

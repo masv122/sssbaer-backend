@@ -23,19 +23,40 @@ class UserSeeder extends Seeder
                     'name' => Str::random(10),
                     'email' => 'a@a.com',
                     'password' => Hash::make(12345678),
-                    'admi' => 0
+                    'admi' => 0,
+                    'supervisor' => 0
+
                 ],
                 [
                     'name' => Str::random(10),
                     'email' => 'b@b.com',
                     'password' => Hash::make(12345678),
-                    'admi' => 0
+                    'admi' => 0,
+                    'supervisor' => 0
+
                 ],
                 [
                     'name' => Str::random(10),
                     'email' => 'c@c.com',
                     'password' => Hash::make(12345678),
-                    'admi' => 1
+                    'admi' => 1,
+                    'supervisor' => 0
+
+                ],
+                [
+                    'name' => Str::random(10),
+                    'email' => 'd@d.com',
+                    'password' => Hash::make(12345678),
+                    'admi' => 1,
+                    'supervisor' => 0
+
+                ],
+                [
+                    'name' => Str::random(10),
+                    'email' => 'e@e.com',
+                    'password' => Hash::make(12345678),
+                    'admi' => 0,
+                    'supervisor' => 1
                 ]
             ]
         );

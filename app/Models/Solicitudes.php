@@ -16,5 +16,8 @@ class Solicitudes extends Model
         'problema',
         'enProceso',
         'terminado',
+        'razonCancelado',
+        'observacionesAlCompletar',
+        'confirmada'
     ];
 }

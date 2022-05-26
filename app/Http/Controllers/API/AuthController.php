@@ -18,7 +18,8 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'email|required|string|unique:users',
             'password' => 'required|string|min:8',
-            'admi' => 'required|boolean'
+            'admi' => 'required|boolean',
+            'supervisor' => 'boolean'
         ]);
 
         $user = User::create([
@@ -26,6 +27,7 @@ class AuthController extends Controller
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
             'admi' => $validatedData['admi'],
+            'admi' => $validatedData['supervisor'],
         ]);
 
         $accessToken = $user->createToken('authToken')->plainTextToken;

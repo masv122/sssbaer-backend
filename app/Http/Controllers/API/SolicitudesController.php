@@ -51,14 +51,15 @@ class SolicitudesController extends Controller
             return response(['error' => $validator->errors(), 'Validation Error'], 400);
         }
 
-        $solicitudes = Solicitudes::create($data);
-        $solicitud = DB::table('solicitudes')
-            ->leftJoin('users', 'solicitudes.idUsuario', '=', 'users.id')
-            ->select('solicitudes.*', 'users.name')
-            ->where('solicitudes.id', '=', $solicitudes->id)
+        $solicitud = Solicitudes::create($data);
+        $user = DB::table('users')
+            ->select('users.name', 'users.admi')
+            ->where('users.id', '=', $solicitud->idUsuario)
             ->get();
-        event(new SolicitudEnviada($solicitud[0]));
-        return response()->json(['Solicitudes' => new SolicitudesResource($solicitudes), 'message' => 'ok']);
+        $text = "Ha enviado una solicitud con ID " . $solicitud->id . ": " . $solicitud->comentarioAdicional;
+        $hora = date("H:i");
+        event(new SolicitudEnviada($user[0], $text, $hora, $solicitud));
+        return response()->json(['Solicitudes' => new SolicitudesResource($solicitud), 'message' => 'ok']);
     }
 
     /**
@@ -83,19 +84,32 @@ class SolicitudesController extends Controller
      * @param  \App\Models\Solicitudes  $solicitudes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Solicitudes $solicitudes)
+    public function update(Request $request, Solicitudes $solicitud)
     {
         $id = $request->id;
-        $solicitudes = Solicitudes::find($id);
-        $solicitudes->update($request->all());
-        $solicitud = DB::table('solicitudes')
-            ->leftJoin('users', 'solicitudes.idUsuario', '=', 'users.id')
-            ->select('solicitudes.*', 'users.name')
-            ->where('solicitudes.id', '=', $solicitudes->id)
+        $solicitud = Solicitudes::find($id);
+        $idAdmiAux = $solicitud->idAdministrador;
+        $solicitud->update($request->all());
+        $idAdmi = $solicitud->idAdministrador;
+        if ($solicitud->enProceso == 1 && $solicitud->terminado == 0) {
+            $tipo = "aceptado";
+            $text = "Ha aceptado la solicitud con ID " . $solicitud->id;
+        } else if ($solicitud->enProceso == 0 && $solicitud->terminado == 1) {
+            $tipo = "completado";
+            $text = "Ha completado la solicitud con ID " . $solicitud->id;
+        } else if (!empty($solicitud->razonCancelado)) {
+            $idAdmi = $idAdmiAux;
+            $tipo = "rechazado";
+            $text = "Ha rechazado la solicitud con ID " . $solicitud->id;
+        }
+        $user = DB::table('users')
+            ->select('users.name', 'users.admi')
+            ->where('users.id', '=', $idAdmi)
             ->get();
-        EstadoActualizado::dispatch($solicitud[0]);
-        SolicitudUsuarioActualizada::dispatch($solicitud[0]);
-        return response(['solicitud' => new SolicitudesResource($solicitudes), 'message' => 'Update successfully'], 200);
+        $hora = date("H:i");
+        EstadoActualizado::dispatch($user[0], $text, $hora, $tipo, $solicitud);
+        SolicitudUsuarioActualizada::dispatch($solicitud);
+        return response(['solicitud' => new SolicitudesResource($solicitud), 'message' => 'Update successfully'], 200);
     }
 
     /**

@@ -17,15 +17,23 @@ class EstadoActualizado implements ShouldBroadcast
      *
      * @var \App\Solicitudes
      */
-    public  $solicitud;
+    public $user;
+    public $text;
+    public $hora;
+    public $tipo;
+    public $solicitud;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($solicitud)
+    public function __construct($user, $text, $hora, $tipo, $solicitud)
     {
+        $this->user = $user;
+        $this->text = $text;
+        $this->hora = $hora;
+        $this->tipo = $tipo;
         $this->solicitud = $solicitud;
     }
 

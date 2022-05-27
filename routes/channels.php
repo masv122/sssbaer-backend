@@ -22,6 +22,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 
 
 Broadcast::channel('solicitudes.{solicitudId}', function ($user, $solicitudId) {
-    error_log(Solicitudes::findOrNew($solicitudId)->id);
     return $user->id === Solicitudes::findOrNew($solicitudId)->idUsuario;
 });

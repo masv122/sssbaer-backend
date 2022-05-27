@@ -20,15 +20,21 @@ class SolicitudEnviada implements ShouldBroadcast
      *
      * @var \App\Solicitudes
      */
-    public  $solicitud;
+    public $user;
+    public $text;
+    public $hora;
+    public $solicitud;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($solicitud)
+    public function __construct($user, $text, $hora, $solicitud)
     {
+        $this->user = $user;
+        $this->text = $text;
+        $this->hora = $hora;
         $this->solicitud = $solicitud;
     }
 

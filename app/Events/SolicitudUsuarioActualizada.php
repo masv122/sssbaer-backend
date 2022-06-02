@@ -28,7 +28,6 @@ class SolicitudUsuarioActualizada implements ShouldBroadcast
     public function __construct($solicitud)
     {
         $this->solicitud = $solicitud;
-        error_log('channel: ' . 'solicitudes' . $this->solicitud->id);
     }
 
 

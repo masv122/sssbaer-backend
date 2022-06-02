@@ -8,10 +8,14 @@ use App\Events\SolicitudUsuarioActualizada;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SolicitudesResource;
 use App\Models\Solicitudes;
+use App\Models\User;
+use App\Notifications\SolicitudActualizadaMail;
+use App\Notifications\SolicitudActualizadaNotiAdmi;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class SolicitudesController extends Controller
@@ -56,7 +60,7 @@ class SolicitudesController extends Controller
             ->select('users.name', 'users.admi')
             ->where('users.id', '=', $solicitud->idUsuario)
             ->get();
-        $text = "Ha enviado una solicitud con ID " . $solicitud->id . ": " . $solicitud->comentarioAdicional;
+        $text = "Ha enviado una solicitud N° " . $solicitud->id . ": " . $solicitud->comentarioAdicional;
         $hora = date("H:i");
         event(new SolicitudEnviada($user[0], $text, $hora, $solicitud));
         return response()->json(['Solicitudes' => new SolicitudesResource($solicitud), 'message' => 'ok']);
@@ -91,22 +95,29 @@ class SolicitudesController extends Controller
         $idAdmiAux = $solicitud->idAdministrador;
         $solicitud->update($request->all());
         $idAdmi = $solicitud->idAdministrador;
+        $userNotification = User::find($solicitud->idUsuario);
+        $admi = User::find($idAdmi);
+
         if ($solicitud->enProceso == 1 && $solicitud->terminado == 0) {
             $tipo = "aceptado";
-            $text = "Ha aceptado la solicitud con ID " . $solicitud->id;
+            $text = "Ha aceptado la solicitud N° " . $solicitud->id;
+            $userNotification->notify(new SolicitudActualizadaMail($solicitud, $admi, $userNotification, "aceptada"));
         } else if ($solicitud->enProceso == 0 && $solicitud->terminado == 1) {
             $tipo = "completado";
-            $text = "Ha completado la solicitud con ID " . $solicitud->id;
+            $text = "Ha completado la solicitud N° " . $solicitud->id;
+            $userNotification->notify(new SolicitudActualizadaMail($solicitud, $admi, $userNotification, "completada"));
         } else if (!empty($solicitud->razonCancelado)) {
             $idAdmi = $idAdmiAux;
             $tipo = "rechazado";
-            $text = "Ha rechazado la solicitud con ID " . $solicitud->id;
+            $text = "Ha rechazado la solicitud N° " . $solicitud->id;
         }
         $user = DB::table('users')
             ->select('users.name', 'users.admi')
             ->where('users.id', '=', $idAdmi)
             ->get();
         $hora = date("H:i");
+        $admis = User::where('admi', '=', 1)->get();
+        Notification::send($admis, new SolicitudActualizadaNotiAdmi($user[0], $text, $hora, $tipo, $solicitud));
         EstadoActualizado::dispatch($user[0], $text, $hora, $tipo, $solicitud);
         SolicitudUsuarioActualizada::dispatch($solicitud);
         return response(['solicitud' => new SolicitudesResource($solicitud), 'message' => 'Update successfully'], 200);

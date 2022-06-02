@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\NotisController;
 use App\Http\Controllers\API\SolicitudesAuxController;
 use App\Http\Controllers\API\SolicitudesController;
 use App\Http\Controllers\API\UserController;
@@ -30,6 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/top-admis', [SolicitudesAuxController::class, 'topAdmis']);
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/solicitudes', SolicitudesController::class);
+    Route::get('/notis', [NotisController::class, 'getNotis']);
+    Route::get('/read-notis', [NotisController::class, 'markAsRead']);
+    Route::get('/delete-notis', [NotisController::class, 'deleteNotis']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

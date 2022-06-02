@@ -20,7 +20,7 @@ class EstadoActualizado implements ShouldBroadcast
     public $user;
     public $text;
     public $hora;
-    public $tipo;
+    public $estado;
     public $solicitud;
 
     /**
@@ -28,12 +28,12 @@ class EstadoActualizado implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($user, $text, $hora, $tipo, $solicitud)
+    public function __construct($user, $text, $hora, $estado, $solicitud)
     {
         $this->user = $user;
         $this->text = $text;
         $this->hora = $hora;
-        $this->tipo = $tipo;
+        $this->estado = $estado;
         $this->solicitud = $solicitud;
     }
 

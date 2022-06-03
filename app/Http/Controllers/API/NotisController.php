@@ -21,7 +21,7 @@ class NotisController extends Controller
 
     public function deleteNotis(Request $request)
     {
-        $request->user()->notifications->delete();
+        $request->user()->notifications()->delete();
         return response()->json(['success' => true]);
     }
 }

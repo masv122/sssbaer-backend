@@ -101,11 +101,11 @@ class SolicitudesController extends Controller
         if ($solicitud->enProceso == 1 && $solicitud->terminado == 0) {
             $tipo = "aceptado";
             $text = "Ha aceptado la solicitud N° " . $solicitud->id;
-            $userNotification->notify(new SolicitudActualizadaMail($solicitud, $admi, $userNotification, "aceptada"));
+           /*  $userNotification->notify(new SolicitudActualizadaMail($solicitud, $admi, $userNotification, "aceptada")); */
         } else if ($solicitud->enProceso == 0 && $solicitud->terminado == 1) {
             $tipo = "completado";
             $text = "Ha completado la solicitud N° " . $solicitud->id;
-            $userNotification->notify(new SolicitudActualizadaMail($solicitud, $admi, $userNotification, "completada"));
+            /* $userNotification->notify(new SolicitudActualizadaMail($solicitud, $admi, $userNotification, "completada")); */
         } else if (!empty($solicitud->razonCancelado)) {
             $idAdmi = $idAdmiAux;
             $tipo = "rechazado";

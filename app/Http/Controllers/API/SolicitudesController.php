@@ -56,13 +56,10 @@ class SolicitudesController extends Controller
         }
 
         $solicitud = Solicitudes::create($data);
-        $user = DB::table('users')
-            ->select('users.name', 'users.admi')
-            ->where('users.id', '=', $solicitud->idUsuario)
-            ->get();
+        $user = request()->user();
         $text = "Ha enviado una solicitud N° " . $solicitud->id . ": " . $solicitud->comentarioAdicional;
         $hora = date("H:i");
-        event(new SolicitudEnviada($user[0], $text, $hora, $solicitud));
+        event(new SolicitudEnviada($user, $text, $hora, $solicitud));
         return response()->json(['Solicitudes' => new SolicitudesResource($solicitud), 'message' => 'ok']);
     }
 

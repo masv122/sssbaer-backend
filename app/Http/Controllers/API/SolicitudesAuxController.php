@@ -47,8 +47,8 @@ class SolicitudesAuxController extends Controller
                             INNER JOIN solicitudes ON (users.id = solicitudes.idAdministrador)
                             WHERE solicitudes.terminado = TRUE
                                 AND users.admi = TRUE
-                                AND MONTH(solicitudes.created_at) = MONTH(NOW())
-                                AND YEAR(solicitudes.created_at) = YEAR(NOW()) GROUP  BY users.name
+                                AND MONTH(solicitudes.updated_at) = MONTH(NOW())
+                                AND YEAR(solicitudes.updated_at) = YEAR(NOW()) GROUP  BY users.name
                             ORDER BY terminadas DESC
  ');
 

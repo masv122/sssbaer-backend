@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/solicitudes-supervisor', [SolicitudesAuxController::class, 'solicitudesEnProcesoOCompletadas']);
     Route::get('/top-admis', [SolicitudesAuxController::class, 'topAdmis']);
     Route::apiResource('/users', UserController::class);
+    Route::post('/delete-user', [UserController::class, 'destroy']);
     Route::apiResource('/solicitudes', SolicitudesController::class);
     Route::get('/notis', [NotisController::class, 'getNotis']);
     Route::get('/read-notis', [NotisController::class, 'markAsRead']);
